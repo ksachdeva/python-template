@@ -1,7 +1,19 @@
 {
   "name": "python-template",
   "dockerFile": "Dockerfile",
-  "runArgs": ["--env-file", ".devcontainer/devcontainer.env"],
+  "containerEnv": {
+    "LANG": "en_US.UTF-8",
+    "NODE_EXTRA_CA_CERTS": "/usr/local/share/ca-certificates/cloudflare.crt",
+    "APP_HOST_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    "APP_DEV_CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}"
+  },
+  "remoteEnv": {
+    "UV_LINK_MODE": "copy",
+    "UV_SYSTEM_CERTS": "true"
+  },
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
@@ -15,6 +27,8 @@
           "testing.pytestArgs": ["tests"],
           "defaultInterpreterPath": "./venv/bin/python"
         },
+        "python.terminal.activateEnvironment": false,
+        "python-envs.terminal.autoActivationType": "off",
         "files.exclude": {
           "**/.git": true,
           "**/.svn": true,
@@ -28,34 +42,16 @@
         },
         "terminal.integrated.fontFamily": "Consolas, monospace",
         "terminal.integrated.defaultProfile.linux": "zsh",
-        "terminal.integrated.profiles.linux": {
-          "bash": {
-            "path": "bash",
-            "icon": "terminal-bash"
-          },
-          "zsh": {
-            "path": "zsh"
-          },
-          "fish": {
-            "path": "fish"
-          },
-          "tmux": {
-            "path": "tmux",
-            "icon": "terminal-tmux"
-          },
-          "pwsh": {
-            "path": "pwsh",
-            "icon": "terminal-powershell"
-          }
-        }
+        "mypy-type-checker.importStrategy": "fromEnvironment",
+        "remote.autoForwardPorts": true,
+        "remote.autoForwardPortsSource": "process"
       },
       "extensions": [
         "ms-python.python",
-        "charliermarsh.ruff",
-        "ms-python.vscode-pylance",
-        "ms-toolsai.jupyter",
         "ms-python.mypy-type-checker",
-        "github.vscode-github-actions"
+        "charliermarsh.ruff",
+        "esbenp.prettier-vscode",
+        "bierner.markdown-mermaid"
       ]
     }
   },
@@ -65,7 +61,7 @@
       "configureZshAsDefaultShell": true
     },
     // Node
-    "ghcr.io/devcontainers/features/node:1": {
+    "ghcr.io/devcontainers/features/node:2.0.0": {
       "version": "lts"
     },
     // TypeScript
@@ -77,12 +73,12 @@
     // uv
     "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
     // docker-in-docker
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+    "ghcr.io/devcontainers/features/docker-in-docker:3.0.1": {
       "moby": false
     }
   },
   "mounts": [
     "source=devcontainer-zshhistory,target=/commandhistory,type=volume"
   ],
-  "postCreateCommand": "bash scripts/post-create.sh"
+  "postCreateCommand": ["bash", ".devcontainer/scripts/post-create.sh"]
 }

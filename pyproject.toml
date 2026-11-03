@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Sachdeva, Kapil"}
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 dependencies = [
 ]
 
@@ -18,6 +18,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "License :: OSI Approved :: Apache Software License",
@@ -48,7 +49,7 @@ dev = [
 [tool.ruff]
 line-length = 120
 fix = true
-target-version = "py311"
+target-version = "py314"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -61,12 +62,9 @@ ignore = ["F401", "E501"]
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "unittest".msg = "Use `pytest` instead."
 
-[tool.ruff.flake8-bugbear]
-extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends", "fastapi.Query", "fastapi.params.Query"]
-
 [tool.mypy]
 strict = true
-python_version = "3.11"
+python_version = "3.14"
 ignore_missing_imports = true
 
 # from https://blog.wolt.com/engineering/2021/09/30/professional-grade-mypy-configuration/
@@ -89,4 +87,10 @@ reportMissingTypeStubs = false
 exclude = []
 
 [tool.poe]
-include = "poe.toml"
+include = [
+   "poe.toml"
+]
+
+[tool.uv]
+override-dependencies = [
+]

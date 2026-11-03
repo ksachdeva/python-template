@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "host-ollama": {
+      "package": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "settings": {
+        "baseURL": "http://host.docker.internal:11434/v1",
+      },
+      "models": {
+        "gemma4:12b-mlx": {
+          "name": "gemma4:12b-mlx",
+        },
+        "gemma4:31b-mlx": {
+          "name": "gemma4:31b-mlx",
+        },
+        "qwen3.8:27b-mlx": {
+          "name": "qwen3.8:27b-mlx",
+        },
+      },
+    }
+  },
+  "plugins": [],
+}

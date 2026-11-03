@@ -3,17 +3,44 @@
   "dockerFile": "Dockerfile",
   "containerEnv": {
     "LANG": "en_US.UTF-8",
+    "DISPLAY": ":99",
     "NODE_EXTRA_CA_CERTS": "/usr/local/share/ca-certificates/cloudflare.crt",
-    "APP_HOST_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
-    "APP_DEV_CONTAINER_WORKSPACE_FOLDER": "${containerWorkspaceFolder}"
+    "REQUESTS_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt",
+    "CURL_CA_BUNDLE": "/etc/ssl/certs/ca-certificates.crt",
+    "PYTHONPYCACHEPREFIX": "/workspaces/.pycache",
+    "REPO_HOST_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    "OPENCODE_DB": "/opencode-storage/opencode.db"
   },
   "remoteEnv": {
+    "UV_CACHE_DIR": "/tmp/repo-uv-cache",
     "UV_LINK_MODE": "copy",
-    "UV_SYSTEM_CERTS": "true"
+    "UV_SYSTEM_CERTS": "true",
+    "UV_MALWARE_CHECK": "1",
+    "UV_PREVIEW_FEATURES": "malware-check,format"
   },
-  "runArgs": [
-    "--add-host=host.docker.internal:host-gateway"
+  "runArgs": ["--add-host=host.docker.internal:host-gateway"],
+  "forwardPorts": [],
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2.7.1": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.10.1": {
+      "moby": false
+    },
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "24",
+      "pnpmVersion": "latest"
+    },
+    "ghcr.io/devcontainers-extra/features/uv:1": {},
+    "ghcr.io/devcontainers-extra/features/typescript:2": {},
+    "ghcr.io/devcontainers-extra/features/ts-node:1": {},
+    "ghcr.io/devcontainers-extra/features/ripgrep:1": {}
+  },
+  "mounts": [
+    "source=devcontainer-zshhistory,target=/commandhistory,type=volume",
+    "source=devcontainer-opencode,target=/opencode-storage,type=volume"
   ],
+  "postCreateCommand": ["bash", ".devcontainer/scripts/post-create.sh"],
   "customizations": {
     "vscode": {
       "settings": {
@@ -29,19 +56,26 @@
         },
         "python.terminal.activateEnvironment": false,
         "python-envs.terminal.autoActivationType": "off",
+        "[javascript]": {
+          "editor.insertSpaces": true,
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescriptreact]": {
+          "editor.tabSize": 2,
+          "editor.insertSpaces": true,
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
         "files.exclude": {
           "**/.git": true,
-          "**/.svn": true,
-          "**/.hg": true,
-          "**/CVS": true,
           "**/.DS_Store": true,
           "**/__pycache__": true,
           "**/.mypy_cache": true,
-          "**/.pytest_cache": true,
-          "**/.ruff_cache": true
+          "**/.ruff_cache": true,
+          "**/.pytest_cache": true
         },
-        "terminal.integrated.fontFamily": "Consolas, monospace",
-        "terminal.integrated.defaultProfile.linux": "zsh",
         "mypy-type-checker.importStrategy": "fromEnvironment",
         "remote.autoForwardPorts": true,
         "remote.autoForwardPortsSource": "process"
@@ -54,31 +88,5 @@
         "bierner.markdown-mermaid"
       ]
     }
-  },
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installOhMyZshConfig": false,
-      "configureZshAsDefaultShell": true
-    },
-    // Node
-    "ghcr.io/devcontainers/features/node:2.0.0": {
-      "version": "lts"
-    },
-    // TypeScript
-    "ghcr.io/devcontainers-extra/features/typescript:2": {},
-    // ts-node
-    "ghcr.io/devcontainers-extra/features/ts-node:1": {},
-    // Modern shell utils
-    "ghcr.io/mikaello/devcontainer-features/modern-shell-utils:2.0.0": {},
-    // uv
-    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
-    // docker-in-docker
-    "ghcr.io/devcontainers/features/docker-in-docker:3.0.1": {
-      "moby": false
-    }
-  },
-  "mounts": [
-    "source=devcontainer-zshhistory,target=/commandhistory,type=volume"
-  ],
-  "postCreateCommand": ["bash", ".devcontainer/scripts/post-create.sh"]
+  }
 }
